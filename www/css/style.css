@@ -1,0 +1,56 @@
+/* Empty. Add your own CSS if you like */
+
+.pane {
+  background-color:#088A68;
+}
+input, textarea{
+  background-color: #088A68;
+  color: #FAFAFA;
+}
+
+.home {
+  display: table !important;
+  width: 100% !important;
+  height: 70% !important;
+}
+.home {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+}
+
+h1, p, h3, h2 {
+    font-family: 'Courier New';
+    color: #FAFAFA;
+}
+.top {
+	vertical-align: top;
+}
+
+.bottom {
+	
+	vertical-align: bottom;
+}
+
+
+textarea{
+  font-size: 22px;
+  width: 90%;
+  text-align: center;
+  padding: 1em;
+  margin: 1em;
+  line-height: 40px
+
+
+}
+.textnote{
+	font-size: 132px;
+  padding-top: 0.7em;
+
+
+}
+
+.icon {
+  font-size: 40px;
+  color: #FAFAFA;
+}

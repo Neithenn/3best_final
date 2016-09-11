@@ -1,0 +1,17 @@
+      <ion-content>
+        <div class="list list-inset">
+          <label class="item item-input">
+            <input type="email" ng-model="user.email" placeholder="Email">
+          </label>
+          <label class="item item-input">
+            <input type="password" ng-model="user.password" ng-minlenght="3" placeholder="Password">
+          </label>
+
+          <button ng-disabled="!user.email || !user.password" class="button button-block button-calm" ng-click="submit()">
+           Log In
+          </button>
+
+
+        
+      </ion-content>
+

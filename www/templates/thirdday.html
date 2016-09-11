@@ -1,0 +1,25 @@
+
+<ion-content>
+<div class="top"><h3 ng-model="date"> {{date}}</h3></div>
+<div class="row">
+   <div class="col col-33"></div>
+   <div class="col col-33 col-center home">
+ 		<h1 class="textnote">3</h1>
+   </div>
+   <div class="col col-33"></div>
+</div>
+
+            <textarea ng-model="note.thirdnote" placeholder="What was the third best thing that happened today?" max-lenght="200" rows
+            ="4"></textarea>
+
+<div class="row">
+	<div class="col col-50" id="footer_left">
+		<i class="icon ion-ios-home-outline" ng-click="golist()"></i>
+	</div>
+	<div class="col col-50" id="footer_right">
+		<i class="icon ion-ios-arrow-thin-right" ng-click="nextnote()"></i>
+	</div>
+</div>
+</ion-content>
+ 
+  
