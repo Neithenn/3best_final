@@ -1,10 +1,9 @@
 
 <ion-content>
-<div class="list">
-	
-	<a class="item" ng-repeat="x in notes" ng-click="singleview({{x}})">
-		{{ x.note2 }} 
-
-	</a>
-</div>
+	<div class="card" style="height:auto" ng-repeat="x in notes" ng-click="singleview({{x}})">  
+			 <div class="item item-body green">
+			    <p class="cardstyle">{{x.created_at | date: "MMM d,"}} <br>
+			    {{x.created_at | date: "y"}}</p>
+			  </div>
+	</div>
 </ion-content>

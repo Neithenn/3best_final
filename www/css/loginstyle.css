@@ -1,0 +1,103 @@
+/* Styles for buttons container */
+.container {
+	left: 50%;
+	margin: -86px 0 0 -103px;
+	position: absolute;
+	top: 50%; 
+}
+
+/* Facebook */
+.fb-icon-bg {
+	background: #354f88;
+	height: 37px;
+	margin: 0 0 -37px 0;
+	width: 41px; 
+}
+
+.fb-icon-bg:after {
+  display: block;
+  padding: 9px 10px 5px 15px;
+}
+
+.fb-bg {
+	background: #3b5998;
+	display: block;
+	height: 37px;
+	margin: 0 0 30px 41px;
+	width: 166px; 
+}
+
+.fb-bg:after {
+	color: #fff;
+	content: "sign in with facebook";
+	font-family: 'Oswald', sans-serif;
+	height: 37px;
+	left: 8%;
+	position: relative;
+	text-transform: uppercase;
+	top: 22%;
+	width: 41px; 
+}
+
+
+.fb-card{
+	background: #3b5998;
+	font-family: 'Oswald', sans-serif;
+	text-transform: uppercase;
+	text-align: center;
+	position: relative;
+	color: #fff;
+	height: 37px;
+		display: block;
+			top: 22%;
+}
+
+
+.fb-card:hover{
+  cursor: pointer;
+}
+
+.fb-card:active{
+  background: #354f88;
+}
+
+/* Google+ */
+.g-icon-bg:after {
+  display: block;
+  padding: 11px 10px 6px 13px;
+}
+
+.g-icon-bg {
+	background: #ce3e26;
+	height: 37px;
+	margin: 0 0 -37px 0;
+	width: 75px; 
+}
+ 
+.g-bg {
+	background: #de4c34;
+	height: 37px;
+	margin-left: 30px;
+	width: auto; 
+}
+ 
+.g-bg:after {
+	color: #fff;
+	content: "sign in with google+";
+	font-family: 'Oswald', sans-serif;
+	height: 37px;
+	left: 10%;
+	position: relative;
+	text-transform: uppercase;
+	top: 22%;
+	width: 41px; 
+}
+
+.g-bg:hover {
+  cursor: pointer;
+}
+
+.iconGoogle{
+	 font-size: 70px;
+  color: #FAFAFA;
+}

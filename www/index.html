@@ -14,6 +14,21 @@
 
     <script src="lib/firebase/firebase.js"></script>
     <script src="lib/angularfire/dist/angularfire.min.js"></script>
+
+
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDqm-xRA5IHlAXtWeee1IiMi0TpxxT8cKk",
+        authDomain: "best-b1598.firebaseapp.com",
+        databaseURL: "https://best-b1598.firebaseio.com",
+        storageBucket: "best-b1598.appspot.com",
+      };
+      firebase.initializeApp(config);
+    </script>
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
     <!-- cordova script (this will be a 404 during development) -->
     <script src="cordova.js"></script>
 
@@ -24,8 +39,10 @@
   </head>
   <body ng-app="starter">
 
-    <ion-pane>
-      <ion-nav-view class="has-header home"></ion-nav-view>
-    </ion-pane>
+      <ion-nav-view></ion-nav-view>
+
+
+
+    
   </body>
 </html>

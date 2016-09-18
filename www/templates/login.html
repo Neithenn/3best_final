@@ -1,17 +1,17 @@
-      <ion-content>
-        <div class="list list-inset">
-          <label class="item item-input">
-            <input type="email" ng-model="user.email" placeholder="Email">
-          </label>
-          <label class="item item-input">
-            <input type="password" ng-model="user.password" ng-minlenght="3" placeholder="Password">
-          </label>
+<ion-content>
+ 
+    <div class="div-icon-front">
+     <i class="ion-ios-paperplane-outline icon-front"></i>
+    </div>
+              <div class="container_sign_in col">
+              <button class="button button-block facebook icon-left ion-social-facebook" ng-click="loginFacebook()">
+                Sign in with Facebook
+              </button>
+                <br>
+              <button class="button button-block google icon-left ion-social-googleplus-outline" ng-click="loginGoogle()">
+                Sign in with Google+
+              </button>
+            </div>
 
-          <button ng-disabled="!user.email || !user.password" class="button button-block button-calm" ng-click="submit()">
-           Log In
-          </button>
-
-
-        
-      </ion-content>
-
+         
+</ion-content>

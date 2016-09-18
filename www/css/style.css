@@ -1,13 +1,16 @@
 /* Empty. Add your own CSS if you like */
 
 .pane {
-  background-color:#088A68;
+
+  background-color: #c8dfeb;
 }
 input, textarea{
-  background-color: #088A68;
-  color: #FAFAFA;
+  background-color: #c8dfeb;
+  color: #585898;
 }
-
+textarea{
+  text-align: center;
+}
 .home {
   display: table !important;
   width: 100% !important;
@@ -21,10 +24,14 @@ input, textarea{
 
 h1, p, h3, h2 {
     font-family: 'Courier New';
-    color: #FAFAFA;
+    color: #585898;
 }
+
+
 .top {
 	vertical-align: top;
+  padding: 1em;
+  text-align: center;
 }
 
 .bottom {
@@ -32,25 +39,80 @@ h1, p, h3, h2 {
 	vertical-align: bottom;
 }
 
+.div-icon-front{
+
+  text-align: center;
+  padding-top: 5em;
+  padding-bottom: 5em;
+}
+
+.icon-front{
+  font-size: 200px;
+  color: #585898;
+}
 
 textarea{
   font-size: 22px;
   width: 90%;
   text-align: center;
-  padding: 1em;
-  margin: 1em;
-  line-height: 40px
+  line-height: 40px;
+  display: block;
 
 
 }
 .textnote{
 	font-size: 132px;
   padding-top: 0.7em;
+  text-align: center;
 
 
 }
 
+.singlenote{
+  font-size: 22px;
+  width: 90%;
+  text-align: left;
+  padding: 1em;
+  margin: 1em;
+  line-height: 40px
+}
+
 .icon {
   font-size: 40px;
+  color: #585898;
+}
+
+.green{
+  background-color:#088A68;
+  color: #585898;
+  text-align: left;
+  font-size: 40px;
+}
+
+.col{
+  border: none;
+}
+
+.cardstyle{
+  font-size: 22px;
+  color: white;
+}
+
+.container-sign-in {
+  margin: 1em;
+}
+
+.facebook{
   color: #FAFAFA;
+  background: #3b5998;
+  padding: 0.5em;
+}
+.google{
+  background: #c32f10;
+  color: #FAFAFA;
+  padding: 0.5em;
+}
+
+#footer_right{
+  text-align: right;
 }

@@ -65,16 +65,62 @@ angular.module('starter', ['ionic', 'firebase'])
     controller: 'NoteView'
   })
 
-  //$urlRouterProvider.otherwise('/login');
+  $urlRouterProvider.otherwise('/login');
 })
 
 
-.controller('Login', function($scope, Auth, $http, userDataFactory, $state){
+
+
+.controller('Login', function($scope, $http, userDataFactory, $state, popUps){
+
+
+
+$scope.loginGoogle = function(){
+
+    var auth = firebase.auth();
+    var provider = new firebase.auth.GoogleAuthProvider();
+
+    auth.signInWithPopup(provider).then(function(result) {
+      // User signed in!
+      console.log(result);
+      sendUser(result.user.email, result.user.uid, 'Google');
+
+    }).catch(function(error) {
+      // An error occurred
+      console.log(error);
+      popUps.emailUsed();
+    });
+
+}
+
+$scope.loginFacebook = function(){
+
+    var auth = firebase.auth();
+    var provider = new firebase.auth.FacebookAuthProvider();
+
+    auth.signInWithPopup(provider).then(function(result) {
+      // User signed in!
+      console.log(result);
+      sendUser(result.user.email, result.user.uid, 'Facebook');
+
+    }).catch(function(error) {
+      // An error occurred
+      console.log(error);
+      popUps.emailUsed();
+    });
+
+}
+
 
 $scope.user = {};
       $scope.submit = function(){
 
-        var json = '{"user": {"email": "' + $scope.user['email'] + '", "password": "'+$scope.user['password']+'"}}';
+        sendUser($scope.user['email'], $scope.user['password']);
+      };
+
+      function sendUser(email, password, provider){
+
+        var json = '{"user": {"email": "' + email + '", "password": "'+ password +'", "provider": "'+ provider +'"}}';
         console.log(json);
         $http({
             method : "POST",
@@ -90,18 +136,24 @@ $scope.user = {};
               $state.go('thirdday');
 
           }, function myError(response){
-            console.log('error');
+            console.log(response);
+               popUps.errorApi();
           });
-
-      };
+      }
 })
 
-.controller('Notes1',function($scope, userDataFactory, $state){
+.controller('Notes1',function($scope, userDataFactory, $state, popUps){
 
   var user_session = this;
+  var sameday;
 
   $scope.note = {};
   $scope.date = userDataFactory.getDate();
+  sameday = userDataFactory.sameDayNote();
+
+  if (sameday != 0){
+    $scope.note.thirdnote = sameday.note3;
+  }
 
   $scope.data = userDataFactory.getUsuario();
 
@@ -110,11 +162,12 @@ $scope.user = {};
   }
 
     $scope.nextnote = function(){
-      if ($scope.note.thirdnote != ""){
+      if ($scope.note.thirdnote){
         $state.go('secondday', {note3: $scope.note.thirdnote});  
       }else{
 
         //Show error 'must fill something!'
+        popUps.emptyNote();
       }
       
     };
@@ -124,7 +177,6 @@ $scope.user = {};
       $state.go('list');
 
     };
-  
 
 })
 
@@ -132,10 +184,17 @@ $scope.user = {};
 
   var user_session = this;
   var note3 = $stateParams.note3;
+  var sameday;
+
   $scope.note = {};
   $scope.date = userDataFactory.getDate();
 
   $scope.data = userDataFactory.getUsuario();
+  sameday = userDataFactory.sameDayNote();
+
+  if (sameday != 0){
+    $scope.note.secondnote = sameday.note2;
+  }
 
   if (!$scope.data){
       $state.go('login');
@@ -143,8 +202,10 @@ $scope.user = {};
 
     $scope.nextnote = function(){
       
-      if ($scope.note.secondnote != ""){
+      if ($scope.note.secondnote){
         $state.go('firstday', {note3: note3, note2: $scope.note.secondnote});  
+      }else{
+         popUps.emptyNote();
       }
       
     };
@@ -157,9 +218,10 @@ $scope.user = {};
 
 })
 
-.controller('Notes3',function($scope, $http, userDataFactory, $state, $stateParams){
+.controller('Notes3',function($scope, $http, userDataFactory, $state, $stateParams, popUps){
 
   var user_session = this;
+  var  sameday;
 
   $scope.notes = {
     note3: $stateParams.note3,
@@ -167,6 +229,11 @@ $scope.user = {};
   }
   $scope.date = userDataFactory.getDate();
   $scope.data = userDataFactory.getUsuario();
+  sameday = userDataFactory.sameDayNote();
+
+  if (sameday != 0){
+    $scope.note.note1 = sameday.note1;
+  }
 
   if (!$scope.data){
       $state.go('login');
@@ -174,10 +241,10 @@ $scope.user = {};
 
     $scope.saveday = function(){
       
-      if ($scope.notes.note1 != ''){
+      if ($scope.notes.note1){
 
-        var json = '{"note": {"note1": "' + $scope.notes.note1 + '", "note2": "'+$scope.notes.note2+'", "note3": "'+$scope.notes.note3+'", "id_user": 1}}';
-        //"id_user": '+scope.data[0]+'}}
+        var json = '{"note": {"note1": "' + $scope.notes.note1 + '", "note2": "'+$scope.notes.note2+'", "note3": "'+$scope.notes.note3+'", "id_user": '+$scope.data[0]+'}}';
+        //"id_user": '+$scope.data[0]+'}}
         console.log(json);
         $http({
               method : "POST",
@@ -192,10 +259,11 @@ $scope.user = {};
 
             }, function myError(response){
               console.log('error');
+              popUps.errorApi();
             });
           }else{
 
-            //COMPLETAR NOTA 1
+             popUps.emptyNote();
           }
       
     };
@@ -232,6 +300,7 @@ $scope.singleview = function(note){
 
 })
 
+
 .factory("userDataFactory", function(){
 
     var user;
@@ -251,6 +320,27 @@ $scope.singleview = function(note){
       },
       getDate: function(){
         return current_date;
+      },
+      sameDayNote: function(){
+        var len = user_notes.length;
+        var i;
+        var date1 = new Date(current_date);
+        var date2;
+
+        for (i = 0; i < len; i++){
+          date2 =  new Date(user_notes[i].created_at);
+          if (date1.getDate() == date2.getDate() && date1.getMonth() == date2.getMonth()
+            && date1.getFullYear() == date2.getFullYear()){
+            break;
+          }
+        }
+
+        if (i >= len) {
+          return 0;
+        }else{
+           return user_notes[i];
+        }
+
       },
       nuevoUsuario: function(userId, email){
           user = [userId, email];
@@ -272,3 +362,48 @@ $scope.singleview = function(note){
     return interfaz;
 })
 
+
+.factory("popUps", function($ionicPopup){
+
+    var interfaz = {
+      emptyNote: function(){
+
+          var alertPopup = $ionicPopup.alert({
+         title: 'Wait a minute!',
+         template: 'Something must have happened to you, cmon think!'
+       });
+
+    alertPopup.then(function(res) {
+     console.log('Popup worked well');
+   });
+    },
+    emailUsed: function(){
+      var alertPopup = $ionicPopup.alert({
+         title: 'Wow! an error!',
+         template: 'Something wrong just happened, try to log in using another provider'
+       });
+
+    alertPopup.then(function(res) {
+     console.log('Popup worked well');
+   });
+
+    },
+    errorApi: function(){
+          var alertPopup = $ionicPopup.alert({
+         title: 'Uhmm that is weird',
+         template: 'We couldn\'t connect to server, try again later!'
+       });
+
+    alertPopup.then(function(res) {
+     console.log('Popup worked well');
+   });
+
+    }
+
+  }
+
+  return interfaz;
+
+
+
+})
