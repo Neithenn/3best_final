@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'firebase'])
+angular.module('starter', ['ionic', 'firebase', 'ionic-datepicker'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -65,7 +65,7 @@ angular.module('starter', ['ionic', 'firebase'])
     controller: 'NoteView'
   })
 
-  $urlRouterProvider.otherwise('/login');
+  //$urlRouterProvider.otherwise('/login');
 })
 
 
@@ -232,7 +232,7 @@ $scope.user = {};
   sameday = userDataFactory.sameDayNote();
 
   if (sameday != 0){
-    $scope.note.note1 = sameday.note1;
+    $scope.notes.note1 = sameday.note1;
   }
 
   if (!$scope.data){
@@ -240,27 +240,58 @@ $scope.user = {};
   }
 
     $scope.saveday = function(){
-      
+
       if ($scope.notes.note1){
 
-        var json = '{"note": {"note1": "' + $scope.notes.note1 + '", "note2": "'+$scope.notes.note2+'", "note3": "'+$scope.notes.note3+'", "id_user": '+$scope.data[0]+'}}';
-        //"id_user": '+$scope.data[0]+'}}
-        console.log(json);
-        $http({
-              method : "POST",
-              url: "http://localhost:3000/api/v1/newnotes",
-              data: json
-            }).then ( function mySucces(response){
-             
+           if (sameday){
+              //UPDATE
+            var json = '{"note": {"note1": "' + $scope.notes.note1 + '", "note2": "'+$scope.notes.note2+'", "note3": "'+$scope.notes.note3+'", "id_user": '+$scope.data[0]+',"id": '+sameday.id+'}}';
+            console.log(json);
+            $scope.notes.created_at = new Date($scope.date);
+            console.log($scope.notes.created_at);
 
-              userDataFactory.newNote($scope.notes);
+                  $http({
+                        method : "POST",
+                        url: "http://localhost:3000/api/v1/updatenotes",
+                        data: json
+                      }).then ( function mySucces(response){
+                       
+                       $scope.notes.id = sameday.id;
+                        //updatenotes
+                        userDataFactory.updateNote($scope.notes);
 
-                $state.go('list');
+                          $state.go('list');
 
-            }, function myError(response){
-              console.log('error');
-              popUps.errorApi();
-            });
+                      }, function myError(response){
+                        console.log('error');
+                        popUps.errorApi();
+                      });
+           
+           }else{
+              //CREATE
+
+            var json = '{"note": {"note1": "' + $scope.notes.note1 + '", "note2": "'+$scope.notes.note2+'", "note3": "'+$scope.notes.note3+'", "id_user": '+$scope.data[0]+'}}';
+            //"id_user": '+$scope.data[0]+'}}
+            console.log(json);
+            $scope.notes.created_at = new Date($scope.date);
+            console.log($scope.notes.created_at);
+
+            $http({
+                  method : "POST",
+                  url: "http://localhost:3000/api/v1/newnotes",
+                  data: json
+                }).then ( function mySucces(response){
+                 
+
+                  userDataFactory.newNote($scope.notes);
+
+                    $state.go('list');
+
+                }, function myError(response){
+                  console.log('error');
+                  popUps.errorApi();
+                });
+              }
           }else{
 
              popUps.emptyNote();
@@ -276,9 +307,45 @@ $scope.user = {};
 
 })
 
-.controller('ListNotes', function($scope, userDataFactory, $state){
+.controller('ListNotes', function($scope, userDataFactory, $state, ionicDatePicker){
 
 $scope.notes = userDataFactory.getNotes();
+console.log($scope.notes);
+
+
+ var ipObj1 = {
+      callback: function (val) {  //Mandatory
+        var i;
+        var arLength;
+        var aux_date;
+
+        $scope.message = '';
+        $scope.notepicker = '';
+        console.log('Return value from the datepicker popup is : ' + val, new Date(val));
+        $scope.datepicker = new Date(val);
+        //Lleno un scope con el nota buscada. search en scope.notes
+        arLength = $scope.notes.length;
+        for (i = 0; i < arLength; i++){
+
+        aux_date = new Date($scope.notes[i].created_at);
+        if (aux_date.getDate() == $scope.datepicker.getDate() && aux_date.getMonth() == $scope.datepicker.getMonth()
+            && aux_date.getFullYear() == $scope.datepicker.getFullYear()){
+             $scope.notepicker = $scope.notes[i];
+          }
+
+        }
+        
+        if (!$scope.notepicker){
+          $scope.message = 'Didn\'t find anything.';
+        }
+
+      }};
+
+      //$scope.fecha = ipObj1;
+
+  $scope.openDatePicker = function(){
+      ionicDatePicker.openDatePicker(ipObj1);
+    };
 
   console.log($scope.notes);
 
@@ -288,7 +355,11 @@ $scope.singleview = function(note){
   $state.go('singlenote');
 
 }
-  //console.log($scope.notes[0].note1);
+
+$scope.start = function(){
+
+   $state.go('thirdday');
+}
 })
 
 
@@ -353,6 +424,20 @@ $scope.singleview = function(note){
       },
       newNote: function(note){
         user_notes.push(note);
+      },
+      updateNote: function(note){
+
+        var len = user_notes.length;
+        var i;
+        for (i = 0; i < len; i++){
+          if (user_notes[i].id == note.id){
+            user_notes[i].note1 = note.note1;
+            user_notes[i].note2 = note.note2;
+            user_notes[i].note3 = note.note3;
+          }
+        }
+
+        console.log(user_notes);
       },
       addDate: function(date){
         current_date = date;

@@ -53,7 +53,7 @@ h1, p, h3, h2 {
 
 textarea{
   font-size: 22px;
-  width: 90%;
+  width: 100%;
   text-align: center;
   line-height: 40px;
   display: block;
@@ -69,12 +69,10 @@ textarea{
 }
 
 .singlenote{
-  font-size: 22px;
-  width: 90%;
-  text-align: left;
-  padding: 1em;
-  margin: 1em;
-  line-height: 40px
+  font-size: 24px;
+  text-align: center;
+  padding-top: 1em;
+  margin: 0;
 }
 
 .icon {
@@ -82,21 +80,12 @@ textarea{
   color: #585898;
 }
 
-.green{
-  background-color:#088A68;
-  color: #585898;
-  text-align: left;
-  font-size: 40px;
-}
+
 
 .col{
   border: none;
 }
 
-.cardstyle{
-  font-size: 22px;
-  color: white;
-}
 
 .container-sign-in {
   margin: 1em;
@@ -113,6 +102,16 @@ textarea{
   padding: 0.5em;
 }
 
-#footer_right{
-  text-align: right;
+.footer_center{
+  text-align: center;
+}
+
+.listnotes{
+  text-align: center;
+  background-color: #c8dfeb;
+  border: 1px solid #585898;
+}
+.pickaDate{
+
+  font-size: 20px;
 }

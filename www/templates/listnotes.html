@@ -1,9 +1,27 @@
 
 <ion-content>
-	<div class="card" style="height:auto" ng-repeat="x in notes" ng-click="singleview({{x}})">  
-			 <div class="item item-body green">
-			    <p class="cardstyle">{{x.created_at | date: "MMM d,"}} <br>
-			    {{x.created_at | date: "y"}}</p>
-			  </div>
+
+<div class="pickaDate">
+    <button class="button button-full button-positive pickaDate" placeholder="Select a date" ng-click="openDatePicker()">Pick a date!</button>
+</div>
+
+<div class="list list-inset" ng-if="datepicker" >
+	<div class="item listnotes" ng-click="singleview({{notepicker}})">
+		<p style="font-size:24px; font-weight:bold;">{{notepicker.created_at | date: "MMM d, y"}} </p>
+		<p style="font-size:24px; font-weight:bold;">{{message}}</p>
 	</div>
+</div>
+
+<div class="list list-inset" ng-if="!datepicker || message" >
+	<div class="date-size item listnotes" ng-repeat="x in notes" ng-click="singleview({{x}})">
+		<p class="date-size" style="font-size:24px; font-weight:bold;">{{x.created_at | date: "MMM d, y"}} </p>
+	</div>
+</div>
+
+<div class="row" style="position: absolute; top: 100%;">
+	<div class="col col-50 footer_center">
+		<i class="icon ion-ios-arrow-thin-left" ng-click="start()"></i>
+	</div>
+</div>	
+
 </ion-content>
