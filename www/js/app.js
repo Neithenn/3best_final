@@ -3,7 +3,7 @@
 // angular.module is a global place for creating, registering and retrieving Angular modules
 // 'starter' is the name of this angular module example (also set in a <body> attribute in index.html)
 // the 2nd parameter is an array of 'requires'
-angular.module('starter', ['ionic', 'firebase', 'ionic-datepicker'])
+angular.module('starter', ['ionic', 'ionic-datepicker', 'ngCordova','ngCordovaOauth'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -65,50 +65,58 @@ angular.module('starter', ['ionic', 'firebase', 'ionic-datepicker'])
     controller: 'NoteView'
   })
 
-  //$urlRouterProvider.otherwise('/login');
+  $urlRouterProvider.otherwise('/login');
 })
 
 
 
 
-.controller('Login', function($scope, $http, userDataFactory, $state, popUps){
+.controller('Login', function($scope, $http, userDataFactory, $cordovaOauth, $state, popUps){
 
 
 
 $scope.loginGoogle = function(){
 
-    var auth = firebase.auth();
-    var provider = new firebase.auth.GoogleAuthProvider();
+$cordovaOauth.google("10731361558-h3ub4o7igmkijiike86aubporrm79f2c.apps.googleusercontent.com", ["email", "profile"]).then(function(result) {
 
-    auth.signInWithPopup(provider).then(function(result) {
-      // User signed in!
-      console.log(result);
-      sendUser(result.user.email, result.user.uid, 'Google');
 
-    }).catch(function(error) {
-      // An error occurred
-      console.log(error);
-      popUps.emailUsed();
-    });
+$http.get("https://www.googleapis.com/plus/v1/people/me", {params: {access_token: result.access_token }})
+       .then(function(res) {
+        $scope.details = res.data;
+
+         sendUser($scope.details.emails[0].value, $scope.details.id, 'Google');
+
+       }, function(error) {
+           alert("Error: " + error);
+       });
+
+        }, function(error) {
+                console.log(error);
+                popUps.emailUsed();
+
+        });
+    
 
 }
 
 $scope.loginFacebook = function(){
 
-    var auth = firebase.auth();
-    var provider = new firebase.auth.FacebookAuthProvider();
+$cordovaOauth.facebook("1063570090358564", ["email", "public_profile"]).then(function(result) {
 
-    auth.signInWithPopup(provider).then(function(result) {
-      // User signed in!
-      console.log(result);
-      sendUser(result.user.email, result.user.uid, 'Facebook');
+   $http.get("https://graph.facebook.com/v2.2/me", {params: {access_token: result.access_token, fields: "name,email", format: "json" }}).then(function(result) {
+        var name = result.data.name;
 
-    }).catch(function(error) {
-      // An error occurred
-      console.log(error);
-      popUps.emailUsed();
-    });
+        sendUser(result.data.email, result.data.id, 'Facebook');
 
+         }, function(error) {
+           alert("Error: " + error);
+       });
+
+}, function(error) {
+                console.log(error);
+                popUps.emailUsed();
+
+        });
 }
 
 
@@ -124,7 +132,7 @@ $scope.user = {};
         console.log(json);
         $http({
             method : "POST",
-            url: "http://localhost:3000/api/v1/checkuser",
+            url: "http://stormy-castle-48703.herokuapp.com/api/v1/checkuser",
             data: json
           }).then ( function mySucces(response){
            
@@ -252,7 +260,7 @@ $scope.user = {};
 
                   $http({
                         method : "POST",
-                        url: "http://localhost:3000/api/v1/updatenotes",
+                        url: "http://stormy-castle-48703.herokuapp.com/api/v1/updatenotes",
                         data: json
                       }).then ( function mySucces(response){
                        
@@ -278,7 +286,7 @@ $scope.user = {};
 
             $http({
                   method : "POST",
-                  url: "http://localhost:3000/api/v1/newnotes",
+                  url: "http://stormy-castle-48703.herokuapp.com/api/v1/newnotes",
                   data: json
                 }).then ( function mySucces(response){
                  
